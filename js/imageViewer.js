@@ -5,18 +5,42 @@ var iv = (function() {
     var margins = 200;
     var ie = /msie/i.test(navigator.userAgent);
 
+    /* 工具函数 */
+    function addClass(element, className) {
+        var classNames = element.className.split(' ');
+        classNames.indexOf(className) === -1 && classNames.push(className);
+        element.className = classNames.join(' ').trim();
+    }
+
+    function removeClass(element, className) {
+        element.className = element.className.split(' ').filter(function(name) {
+            return name != className;
+        }).join(' ').trim();
+    } 
+
+    function stopPropagation(event) {
+        !ie ? event.stopPropagation() : window.event.cancelBubble = true;
+    }
+
+    function preventDefault(event) {
+        !ie ? event.preventDefault() : window.event.returnValue = false;
+    }
+
+    /* 渲染组件 */
     function render(src) {
+        addClass(document.body, 'ivActive');
         var overlay = document.createElement('div');
         document.body.appendChild(overlay);
         overlay.outerHTML = '<div id="ivOverlay"><img id="ivImage" src="' + src + '"/><div id="ivController"></div></div>';
 
         controller = document.getElementById('ivController');
-        var controllerHtml = '<a id="ivLeftRotate" href="#"><i class="fa fa-undo fa-4x"></i></a>';
-            controllerHtml += '<a id="ivZoom" href="#"><i class="fa fa-square-o fa-4x"></i></a>';
-            controllerHtml += '<a id="ivRightRotate" href="#"><i class="fa fa-repeat fa-4x"></i></a>';
+        var controllerHtml = '<a id="ivLeftRotate" href="#"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-undo fa-stack-1x"></i></span></i></span></a>';
+            controllerHtml += '<a id="ivZoom" href="#"><span class="fa-stack fa-2x"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-square-o fa-stack-1x"></i></span></i></span></a>';
+            controllerHtml += '<a id="ivRightRotate" href="#"><span class="fa-stack fa-lg"><i class="fa fa-circle-thin fa-stack-2x"></i><i class="fa fa-repeat fa-stack-1x"></i></span></i></span></a>';
         controller.innerHTML = controllerHtml;
     }
 
+    /* 注册事件 */
     function registerEvent() {
         window.onresize = function() {
             resetPosition();
@@ -84,18 +108,13 @@ var iv = (function() {
             stopPropagation(event);
             preventDefault(event);
         }
-
-        function stopPropagation(event) {
-            !window.event ? event.stopPropagation() : window.event.cancelBubble = true;
-        }
-
-        function preventDefault(event) {
-            !window.event ? event.preventDefault() : window.event.returnValue = false;
-        }
     }
 
+
+    /* 事件处理函数 */
     function removeOverlay() {
         overlay.remove ? overlay.remove() : overlay.parentNode.removeChild(overlay);
+        removeClass(document.body, 'ivActive');
     }
 
     function getInitPosition() {
@@ -203,6 +222,7 @@ var iv = (function() {
         }
     }
 
+    /* 主函数 */
     function imageViewer(src) {
         render(src);
         registerEvent();
