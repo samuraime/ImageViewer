@@ -2,9 +2,18 @@
     overflow: hidden;
 }
 
-#ivOverlay, #ivImage, #ivController {
+.ivShow {
+    display: block;
+}
+
+.ivHidden {
+    display: none;
+}
+
+#ivOverlay, #ivLoading, #ivImage, #ivController {
     position: fixed;
     z-index: 9999;
+    color: #fff;
 }
 
 #ivOverlay {
@@ -17,6 +26,16 @@
     cursor: pointer;
 }
 
+#ivLoading {
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+}
+
 #ivImage {
     border: none;
     background: #000 no-repeat;
@@ -26,25 +45,21 @@
 
 #ivController {
     width: 180px;
-    margin-left: -97px;
+    margin-left: -102px;
     border: 2px solid #fff;
     border-radius: 20px;
     padding: 5px 10px;
     bottom: 10px;
     background: rgba(0, 0, 0, .95);
-    color: #fff;
     text-align: center;
     left: 50%;
 }
 
 #ivController a {
-    opacity: .6;
-    transition: all .5s;
-    outline-style: none;
-}
-
-#ivController a:link, #ivController a:active {
     color: #fff;
+    opacity: .6;
+    outline-style: none;
+    transition: opacity .5s;
 }
 
 #ivController a:hover {
